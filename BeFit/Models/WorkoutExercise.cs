@@ -7,15 +7,15 @@ namespace BeFit.Models
     {
         public int Id { get; set; }
 
-        // 🔗 Relacja do typu ćwiczenia
+        // Relacja do typu ćwiczenia
         public int ExerciseTypeId { get; set; }
         public ExerciseType ExerciseType { get; set; }
 
-        // 🔗 Relacja do sesji
+        // Relacja do sesji
         public int WorkoutSessionId { get; set; }
         public WorkoutSession WorkoutSession { get; set; }
 
-        // 🏋️ Dane treningowe
+        // Dane treningowe
         [Range(0, 1000)]
         public double Weight { get; set; } // kg
 

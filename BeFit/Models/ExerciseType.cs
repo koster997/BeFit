@@ -7,7 +7,7 @@ namespace BeFit.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(50)] // możesz dobrać inną wartość
+        [MaxLength(50)] // maksymalna długość
         public string Name { get; set; } = string.Empty;
     }
 }

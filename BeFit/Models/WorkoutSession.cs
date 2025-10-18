@@ -12,11 +12,11 @@ namespace BeFit.Models
         [DataType(DataType.DateTime)]
         public DateTime EndTime { get; set; }
 
-        // ewentualnie walidacja (opcjonalna):
-        // public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        // {
-        //     if (EndTime < StartTime)
-        //         yield return new ValidationResult("Data zakończenia nie może być wcześniejsza niż rozpoczęcia.");
-        // }
+        // walidacja:
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+             if (EndTime < StartTime)
+                 yield return new ValidationResult("Data zakończenia nie może być wcześniejsza niż rozpoczęcia.");
+        }
     }
 }

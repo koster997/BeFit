@@ -6,22 +6,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BeFit.Data;
+using BeFit.Models;
+using Microsoft.AspNetCore.Identity;
 
-namespace BeFit.Models
+namespace BeFit.Controllers
 {
     public class WorkoutSessionsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public WorkoutSessionsController(ApplicationDbContext context)
+        public WorkoutSessionsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: WorkoutSessions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.WorkoutSessions.ToListAsync());
+            var sessions = await _context.WorkoutSessions
+                .Include(w => w.ApplicationUser)
+                .OrderByDescending(w => w.StartTime)
+                .ToListAsync();
+
+            return View(sessions);
         }
 
         // GET: WorkoutSessions/Details/5
@@ -33,7 +42,9 @@ namespace BeFit.Models
             }
 
             var workoutSession = await _context.WorkoutSessions
+                .Include(w => w.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (workoutSession == null)
             {
                 return NotFound();
@@ -49,14 +60,15 @@ namespace BeFit.Models
         }
 
         // POST: WorkoutSessions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,StartTime,EndTime")] WorkoutSession workoutSession)
         {
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User); // pobiera aktualnie zalogowanego użytkownika
+                workoutSession.ApplicationUserId = user?.Id;     // przypisuje jego ID do sesji
+
                 _context.Add(workoutSession);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -81,11 +93,9 @@ namespace BeFit.Models
         }
 
         // POST: WorkoutSessions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,StartTime,EndTime")] WorkoutSession workoutSession)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,StartTime,EndTime,ApplicationUserId")] WorkoutSession workoutSession)
         {
             if (id != workoutSession.Id)
             {
@@ -124,7 +134,9 @@ namespace BeFit.Models
             }
 
             var workoutSession = await _context.WorkoutSessions
+                .Include(w => w.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (workoutSession == null)
             {
                 return NotFound();
@@ -142,9 +154,9 @@ namespace BeFit.Models
             if (workoutSession != null)
             {
                 _context.WorkoutSessions.Remove(workoutSession);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -6,23 +6,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BeFit.Data;
+using BeFit.Models;
+using Microsoft.AspNetCore.Identity;
 
-namespace BeFit.Models
+namespace BeFit.Controllers
 {
     public class WorkoutExercisesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public WorkoutExercisesController(ApplicationDbContext context)
+        public WorkoutExercisesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: WorkoutExercises
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.WorkoutExercises.Include(w => w.ExerciseType).Include(w => w.WorkoutSession);
-            return View(await applicationDbContext.ToListAsync());
+            var exercises = _context.WorkoutExercises
+                .Include(w => w.ExerciseType)
+                .Include(w => w.WorkoutSession)
+                .Include(w => w.ApplicationUser)
+                .OrderByDescending(w => w.WorkoutSessionId);
+
+            return View(await exercises.ToListAsync());
         }
 
         // GET: WorkoutExercises/Details/5
@@ -36,6 +45,7 @@ namespace BeFit.Models
             var workoutExercise = await _context.WorkoutExercises
                 .Include(w => w.ExerciseType)
                 .Include(w => w.WorkoutSession)
+                .Include(w => w.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (workoutExercise == null)
             {
@@ -54,18 +64,20 @@ namespace BeFit.Models
         }
 
         // POST: WorkoutExercises/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ExerciseTypeId,WorkoutSessionId,Weight,Sets,Repetitions")] WorkoutExercise workoutExercise)
         {
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User); // pobiera zalogowanego użytkownika
+                workoutExercise.ApplicationUserId = user?.Id;     // przypisuje jego ID
+
                 _context.Add(workoutExercise);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ExerciseTypeId"] = new SelectList(_context.ExerciseTypes, "Id", "Name", workoutExercise.ExerciseTypeId);
             ViewData["WorkoutSessionId"] = new SelectList(_context.WorkoutSessions, "Id", "StartTime", workoutExercise.WorkoutSessionId);
             return View(workoutExercise);
@@ -84,17 +96,16 @@ namespace BeFit.Models
             {
                 return NotFound();
             }
+
             ViewData["ExerciseTypeId"] = new SelectList(_context.ExerciseTypes, "Id", "Name", workoutExercise.ExerciseTypeId);
             ViewData["WorkoutSessionId"] = new SelectList(_context.WorkoutSessions, "Id", "StartTime", workoutExercise.WorkoutSessionId);
             return View(workoutExercise);
         }
 
         // POST: WorkoutExercises/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ExerciseTypeId,WorkoutSessionId,Weight,Sets,Repetitions")] WorkoutExercise workoutExercise)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ExerciseTypeId,WorkoutSessionId,Weight,Sets,Repetitions,ApplicationUserId")] WorkoutExercise workoutExercise)
         {
             if (id != workoutExercise.Id)
             {
@@ -121,6 +132,7 @@ namespace BeFit.Models
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ExerciseTypeId"] = new SelectList(_context.ExerciseTypes, "Id", "Name", workoutExercise.ExerciseTypeId);
             ViewData["WorkoutSessionId"] = new SelectList(_context.WorkoutSessions, "Id", "StartTime", workoutExercise.WorkoutSessionId);
             return View(workoutExercise);
@@ -137,7 +149,9 @@ namespace BeFit.Models
             var workoutExercise = await _context.WorkoutExercises
                 .Include(w => w.ExerciseType)
                 .Include(w => w.WorkoutSession)
+                .Include(w => w.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (workoutExercise == null)
             {
                 return NotFound();
@@ -155,9 +169,9 @@ namespace BeFit.Models
             if (workoutExercise != null)
             {
                 _context.WorkoutExercises.Remove(workoutExercise);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BeFit.Models
 {
@@ -6,17 +8,18 @@ namespace BeFit.Models
     {
         public int Id { get; set; }
 
+        [Display(Name = "Data rozpoczęcia")]
         [DataType(DataType.DateTime)]
         public DateTime StartTime { get; set; }
 
+        [Display(Name = "Data zakończenia")]
         [DataType(DataType.DateTime)]
         public DateTime EndTime { get; set; }
 
-        // walidacja:
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-             if (EndTime < StartTime)
-                 yield return new ValidationResult("Data zakończenia nie może być wcześniejsza niż rozpoczęcia.");
-        }
+        // Użytkownik, który wykonał trening
+        public string? ApplicationUserId { get; set; }
+
+        [ForeignKey("ApplicationUserId")]
+        public ApplicationUser? ApplicationUser { get; set; }
     }
 }

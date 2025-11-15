@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BeFit.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class AddUsers : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,6 +30,9 @@ namespace BeFit.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
+                    LastName = table.Column<string>(type: "TEXT", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -61,20 +64,6 @@ namespace BeFit.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExerciseTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WorkoutSessions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    StartTime = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WorkoutSessions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,6 +173,26 @@ namespace BeFit.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WorkoutSessions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    StartTime = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkoutSessions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkoutSessions_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WorkoutExercises",
                 columns: table => new
                 {
@@ -193,11 +202,17 @@ namespace BeFit.Migrations
                     WorkoutSessionId = table.Column<int>(type: "INTEGER", nullable: false),
                     Weight = table.Column<double>(type: "REAL", nullable: false),
                     Sets = table.Column<int>(type: "INTEGER", nullable: false),
-                    Repetitions = table.Column<int>(type: "INTEGER", nullable: false)
+                    Repetitions = table.Column<int>(type: "INTEGER", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WorkoutExercises", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkoutExercises_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_WorkoutExercises_ExerciseTypes_ExerciseTypeId",
                         column: x => x.ExerciseTypeId,
@@ -250,6 +265,11 @@ namespace BeFit.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_WorkoutExercises_ApplicationUserId",
+                table: "WorkoutExercises",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WorkoutExercises_ExerciseTypeId",
                 table: "WorkoutExercises",
                 column: "ExerciseTypeId");
@@ -258,6 +278,11 @@ namespace BeFit.Migrations
                 name: "IX_WorkoutExercises_WorkoutSessionId",
                 table: "WorkoutExercises",
                 column: "WorkoutSessionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkoutSessions_ApplicationUserId",
+                table: "WorkoutSessions",
+                column: "ApplicationUserId");
         }
 
         /// <inheritdoc />
@@ -285,13 +310,13 @@ namespace BeFit.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "ExerciseTypes");
 
             migrationBuilder.DropTable(
                 name: "WorkoutSessions");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

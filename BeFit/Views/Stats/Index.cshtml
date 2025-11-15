@@ -1,0 +1,27 @@
+﻿@model IEnumerable<BeFit.Models.ExerciseStats>
+
+<h2>Statystyki ćwiczeń (ostatnie 4 tygodnie)</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Ćwiczenie</th>
+            <th>Ilość wykonań</th>
+            <th>Łączna liczba powtórzeń</th>
+            <th>Średnie obciążenie (kg)</th>
+            <th>Maksymalne obciążenie (kg)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.ExerciseName</td>
+                <td>@s.Count</td>
+                <td>@s.TotalRepetitions</td>
+                <td>@s.AvgWeight.ToString("F1")</td>
+                <td>@s.MaxWeight.ToString("F1")</td>
+            </tr>
+        }
+    </tbody>
+</table>

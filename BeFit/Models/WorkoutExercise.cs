@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BeFit.Models
 {
@@ -7,22 +6,22 @@ namespace BeFit.Models
     {
         public int Id { get; set; }
 
-        // Relacja do typu ćwiczenia
+        [Display(Name = "Rodzaj ćwiczenia")]
         public int ExerciseTypeId { get; set; }
-        public ExerciseType ExerciseType { get; set; }
 
-        // Relacja do sesji
+        [Display(Name = "Sesja treningowa")]
         public int WorkoutSessionId { get; set; }
-        public WorkoutSession WorkoutSession { get; set; }
 
-        // Dane treningowe
-        [Range(0, 1000)]
-        public double Weight { get; set; } // kg
+        [Display(Name = "Obciążenie (kg)")]
+        public double Weight { get; set; }
 
-        [Range(1, 20)]
+        [Display(Name = "Serie")]
         public int Sets { get; set; }
 
-        [Range(1, 50)]
+        [Display(Name = "Powtórzenia w serii")]
         public int Repetitions { get; set; }
+
+        public ExerciseType ExerciseType { get; set; }
+        public WorkoutSession WorkoutSession { get; set; }
     }
 }

@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using BeFit.Data;
 using BeFit.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BeFit.Controllers
 {
+    [Authorize]
     public class WorkoutExercisesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,7 +27,10 @@ namespace BeFit.Controllers
         // GET: WorkoutExercises
         public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(User);
+
             var exercises = _context.WorkoutExercises
+                .Where(w => w.ApplicationUserId == user.Id)
                 .Include(w => w.ExerciseType)
                 .Include(w => w.WorkoutSession)
                 .Include(w => w.ApplicationUser)
@@ -59,7 +64,11 @@ namespace BeFit.Controllers
         public IActionResult Create()
         {
             ViewData["ExerciseTypeId"] = new SelectList(_context.ExerciseTypes, "Id", "Name");
-            ViewData["WorkoutSessionId"] = new SelectList(_context.WorkoutSessions, "Id", "StartTime");
+            var user = _userManager.GetUserAsync(User).Result;
+            ViewData["WorkoutSessionId"] = new SelectList(_context.WorkoutSessions
+                    .Where(s => s.ApplicationUserId == user.Id)
+                    .OrderByDescending(s => s.StartTime),
+                "Id", "StartTime");
             return View();
         }
 

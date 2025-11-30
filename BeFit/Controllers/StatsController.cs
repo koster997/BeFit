@@ -5,24 +5,31 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BeFit.Controllers
 {
+    [Authorize]
     public class StatsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public StatsController(ApplicationDbContext context)
+        public StatsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
             var fourWeeksAgo = DateTime.Now.AddDays(-28);
+            var user = await _userManager.GetUserAsync(User);
 
             var stats = await _context.WorkoutExercises
-                .Where(we => we.WorkoutSession.StartTime >= fourWeeksAgo)
+                .Where(we => we.WorkoutSession.StartTime >= fourWeeksAgo
+                             && we.ApplicationUserId == user.Id)  // filtr: tylko dane zalogowanego
                 .GroupBy(we => we.ExerciseType.Name)
                 .Select(g => new ExerciseStats
                 {

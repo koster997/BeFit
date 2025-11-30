@@ -1,8 +1,54 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "BeFit – Panel główny";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Witaj w&nbsp;BeFit!</h1>
+
+    <div class="text-center mb-5">
+        <p class="lead">Twoje centrum zarządzania treningami 💪</p>
+        <hr />
+    </div>
+
+    <div class="row text-center">
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Sesje treningowe</h5>
+                    <p class="card-text">Zarządzaj swoimi sesjami treningowymi.</p>
+                    <a href="/WorkoutSessions" class="btn btn-primary">Przejdź</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Wykonane ćwiczenia</h5>
+                    <p class="card-text">Zobacz i&nbsp;dodaj swoje ćwiczenia.</p>
+                    <a href="/WorkoutExercises" class="btn btn-primary">Przejdź</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Typy ćwiczeń</h5>
+                    <p class="card-text">Przeglądaj i&nbsp;dodawaj typy ćwiczeń.</p>
+                    <a href="/ExerciseTypes" class="btn btn-primary">Przejdź</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Statystyki</h5>
+                    <p class="card-text">Zobacz swoje wyniki i&nbsp;postępy.</p>
+                    <a href="/Stats" class="btn btn-primary">Przejdź</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

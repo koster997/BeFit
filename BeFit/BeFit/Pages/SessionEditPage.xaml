@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="BeFit.Pages.SessionEditPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Sesja treningowa">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+
+            <Label x:Name="TitleLabel"
+                   FontSize="24"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Data rozpoczęcia" />
+            <DatePicker x:Name="StartDatePicker" />
+
+            <Label Text="Godzina rozpoczęcia" />
+            <TimePicker x:Name="StartTimePicker" />
+
+            <Label Text="Data zakończenia" />
+            <DatePicker x:Name="EndDatePicker" />
+
+            <Label Text="Godzina zakończenia" />
+            <TimePicker x:Name="EndTimePicker" />
+
+            <Button Text="Zapisz"
+                    Clicked="OnSaveClicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

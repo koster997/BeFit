@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="BeFit.Pages.LoginPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Logowanie">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+
+            <Label Text="Logowanie do BeFit"
+                   FontSize="24"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Nazwa użytkownika (admin / user)" />
+            <Entry x:Name="UsernameEntry"
+                   Placeholder="Wpisz nazwę użytkownika" />
+
+            <Label Text="Hasło (domyślnie: admin lub user)" />
+            <Entry x:Name="PasswordEntry"
+                   Placeholder="Wpisz hasło"
+                   IsPassword="True" />
+
+            <Button Text="Zaloguj"
+                    Clicked="OnLoginClicked" />
+
+            <Button Text="Wyloguj"
+                    BackgroundColor="DarkRed"
+                    Clicked="OnLogoutClicked" />
+
+            <Label x:Name="StatusLabel"
+                   TextColor="Gray"
+                   FontAttributes="Italic" />
+
+            <Label Text="Dostępne role:"
+                   FontAttributes="Bold"
+                   Margin="0,20,0,0" />
+            <Label Text="- admin / admin  (administrator, może edytować typy ćwiczeń)" />
+            <Label Text="- user / user    (zwykły użytkownik, może tworzyć własne sesje i ćwiczenia)" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

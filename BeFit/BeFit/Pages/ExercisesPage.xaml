@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="BeFit.Pages.ExercisesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Ćwiczenia">
+
+    <StackLayout Padding="20" Spacing="10">
+
+        <Label Text="Wykonane ćwiczenia"
+               FontSize="24"
+               HorizontalOptions="Center" />
+
+        <Label x:Name="InfoLabel"
+               TextColor="Gray" />
+
+        <Button Text="Dodaj wykonane ćwiczenie"
+                x:Name="AddExerciseButton"
+                Clicked="OnAddExerciseClicked" />
+
+        <CollectionView x:Name="ExercisesList">
+            <CollectionView.EmptyView>
+                <Label Text="Brak wykonanych ćwiczeń do wyświetlenia." />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,5" Padding="10" BorderColor="#cccccc">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding ExerciseType.Name}"
+                                   FontAttributes="Bold" />
+                            <Label Text="{Binding TrainingSession.StartTime, StringFormat='Sesja: {0:dd.MM.yyyy HH:mm}'}" />
+                            <Label Text="{Binding Weight, StringFormat='Obciążenie: {0} kg'}" />
+                            <Label Text="{Binding Sets, StringFormat='Serie: {0}'}" />
+                            <Label Text="{Binding Reps, StringFormat='Powtórzenia w serii: {0}'}" />
+                            <Label Text="{Binding TotalReps, StringFormat='Łącznie powtórzeń: {0}'}" />
+
+                            <StackLayout Orientation="Horizontal" Spacing="10" Margin="0,5,0,0">
+                                <Button Text="Edytuj"
+                                        Clicked="OnEditClicked"
+                                        CommandParameter="{Binding Id}" />
+                                <Button Text="Usuń"
+                                        BackgroundColor="DarkRed"
+                                        Clicked="OnDeleteClicked"
+                                        CommandParameter="{Binding Id}" />
+                            </StackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </StackLayout>
+
+</ContentPage>

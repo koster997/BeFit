@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="BeFit.Pages.ExerciseEditPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Wykonane ćwiczenie">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+
+            <Label x:Name="TitleLabel"
+                   FontSize="24"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Sesja treningowa" />
+            <Picker x:Name="SessionPicker"
+                    Title="Wybierz sesję" />
+
+            <Label Text="Typ ćwiczenia" />
+            <Picker x:Name="ExerciseTypePicker"
+                    Title="Wybierz ćwiczenie" />
+
+            <Label Text="Obciążenie (kg)" />
+            <Entry x:Name="WeightEntry"
+                   Keyboard="Numeric"
+                   Placeholder="Np. 50" />
+
+            <Label Text="Liczba serii" />
+            <Entry x:Name="SetsEntry"
+                   Keyboard="Numeric"
+                   Placeholder="Np. 3" />
+
+            <Label Text="Liczba powtórzeń w serii" />
+            <Entry x:Name="RepsEntry"
+                   Keyboard="Numeric"
+                   Placeholder="Np. 10" />
+
+            <Label Text="Notatki (opcjonalnie)" />
+            <Editor x:Name="NotesEditor"
+                    AutoSize="TextChanges"
+                    Placeholder="Dodatkowe informacje" />
+
+            <Button Text="Zapisz"
+                    Clicked="OnSaveClicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

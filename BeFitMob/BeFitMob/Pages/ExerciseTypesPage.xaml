@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="BeFitMob.Pages.ExerciseTypesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Typy ćwiczeń">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+
+            <Label Text="Lista typów ćwiczeń"
+                   FontSize="24"
+                   HorizontalOptions="Center" />
+
+            <Label x:Name="InfoLabel"
+                   TextColor="Gray" />
+
+            <CollectionView x:Name="ExerciseTypesList">
+                <CollectionView.EmptyView>
+                    <Label Text="Brak zdefiniowanych typów ćwiczeń." />
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,5" Padding="10" BorderColor="#cccccc">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Name}"
+                                       FontAttributes="Bold" />
+                                <Label Text="{Binding Description}" />
+                                <HorizontalStackLayout Spacing="10" Margin="0,5,0,0">
+                                    <Button Text="Edytuj"
+                                            CommandParameter="{Binding Id}"
+                                            Clicked="OnEditClicked" />
+                                    <Button Text="Usuń"
+                                            BackgroundColor="DarkRed"
+                                            CommandParameter="{Binding Id}"
+                                            Clicked="OnDeleteClicked" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <BoxView HeightRequest="1" Color="#cccccc" Margin="0,10,0,10" />
+
+            <Label Text="Formularz typu ćwiczenia"
+                   FontAttributes="Bold" />
+
+            <Label Text="Nazwa ćwiczenia" />
+            <Entry x:Name="NameEntry"
+                   Placeholder="Np. Przysiad ze sztangą" />
+
+            <Label Text="Opis (opcjonalnie)" />
+            <Editor x:Name="DescriptionEditor"
+                    AutoSize="TextChanges"
+                    Placeholder="Krótki opis ćwiczenia" />
+
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="Nowy"
+                        Clicked="OnNewClicked" />
+                <Button Text="Zapisz"
+                        Clicked="OnSaveClicked" />
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

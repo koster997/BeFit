@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="BeFit.Pages.StatsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Statystyki">
+
+    <StackLayout Padding="20" Spacing="10">
+
+        <Label Text="Statystyki z ostatnich 4 tygodni"
+               FontSize="24"
+               HorizontalOptions="Center" />
+
+        <Label x:Name="InfoLabel"
+               TextColor="Gray" />
+
+        <CollectionView x:Name="StatsList">
+            <CollectionView.EmptyView>
+                <Label Text="Brak danych do wyświetlenia. Upewnij się, że dodałeś sesje i ćwiczenia w ostatnich 4 tygodniach." />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,5" Padding="10" BorderColor="#cccccc">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding ExerciseName}"
+                                   FontAttributes="Bold" />
+                            <Label Text="{Binding TimesPerformed, StringFormat='Liczba treningów: {0}'}" />
+                            <Label Text="{Binding TotalReps, StringFormat='Łączna liczba powtórzeń: {0}'}" />
+                            <Label Text="{Binding AverageWeight, StringFormat='Średnie obciążenie: {0:F2} kg'}" />
+                            <Label Text="{Binding MaxWeight, StringFormat='Maksymalne obciążenie: {0:F2} kg'}" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </StackLayout>
+
+</ContentPage>

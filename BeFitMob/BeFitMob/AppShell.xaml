@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="BeFitMob.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:BeFitMob.Pages"
+    Title="BeFitMob">
+
+    <TabBar>
+        <ShellContent
+            Title="Typy ćwiczeń"
+            ContentTemplate="{DataTemplate pages:ExerciseTypesPage}" />
+
+        <ShellContent
+            Title="Sesje"
+            ContentTemplate="{DataTemplate pages:SessionsPage}" />
+
+        <ShellContent
+            Title="Ćwiczenia"
+            ContentTemplate="{DataTemplate pages:ExercisesPage}" />
+
+        <ShellContent
+            Title="Statystyki"
+            ContentTemplate="{DataTemplate pages:StatsPage}" />
+
+        <ShellContent
+            Title="Logowanie"
+            ContentTemplate="{DataTemplate pages:LoginPage}" />
+    </TabBar>
+
+</Shell>
